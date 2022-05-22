@@ -1,16 +1,21 @@
 package me.towercraft.rolles.portalhub.event;
 
-import org.bukkit.Location;
+import me.towercraft.rolles.portalhub.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPortalEvent;
 
 public class PortalEnterEvent implements Listener {
-    @EventHandler
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEnterPortal(PlayerPortalEvent event) {
-        Player enteredPlayer = event.getPlayer();
-        enteredPlayer.setVelocity(enteredPlayer.getLocation().getDirection().multiply(-1));
-        enteredPlayer.performCommand("gui open servers");
+        Player player = event.getPlayer();
+        player.setVelocity(player.getLocation().getDirection().setY(0).normalize().multiply(-2));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+            player.chat("/gui open servers");
+        }, 5);
     }
 }
